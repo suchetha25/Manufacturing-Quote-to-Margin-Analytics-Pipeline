@@ -1,0 +1,299 @@
+{
+  "datasets": [
+    {
+      "name": "2744a32b",
+      "displayName": "Manufacturing Revenue Margins Summary Report",
+      "queryLines": [
+        "select round(sum(total_revenue),2) as total_revenue,\r\n",
+        "round(avg(margin_pct),2) as avg_margin_pct,\r\n",
+        "count(distinct quote_id) as total_quotes\r\n",
+        "from default.gold_manufacturing_margins;\r\n",
+        "\r\n"
+      ]
+    },
+    {
+      "name": "b03ecdc5",
+      "displayName": "Product Category Revenue and Margin Overview",
+      "queryLines": [
+        "select product_category, \r\n",
+        "round(sum(total_revenue),2) as category_revenue,\r\n",
+        "round(avg(margin_pct),2) as avg_margin_pct\r\n",
+        "from default.gold_manufacturing_margins\r\n",
+        "group by product_category\r\n",
+        "order by category_revenue desc;"
+      ]
+    },
+    {
+      "name": "a19991dc",
+      "displayName": "Gold Margin Anomaly Counts by Reason Summary",
+      "queryLines": [
+        "SELECT \r\n",
+        "    anomaly_reason,\r\n",
+        "    COUNT(*) AS anomaly_count\r\n",
+        "FROM default.gold_margin_anomalies\r\n",
+        "GROUP BY anomaly_reason;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "0da0a200",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "total-revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2744a32b",
+                  "fields": [
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "#### <span style=\"text-align:center;display:block\"><span style=\"font-size:18px;font-weight:700;text-decoration:underline\">Total Revenue</span></span>",
+                "version": 1
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_revenue)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "e15d927f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2744a32b",
+                  "fields": [
+                    {
+                      "name": "sum(total_quotes)",
+                      "expression": "SUM(`total_quotes`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "#### <span style=\"text-align:center;display:block\"><span style=\"font-size: 18px;font-weight: 700;text-decoration: underline;\">Total Quotes</span></span>",
+                "version": 1
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_quotes)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "302427f3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2744a32b",
+                  "fields": [
+                    {
+                      "name": "sum(avg_margin_pct)",
+                      "expression": "SUM(`avg_margin_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "#### <span style=\"text-align:center;display:block\"><span style=\"font-size:18px;font-weight:700;text-decoration:underline\">Average Margin (%)</span></span>",
+                "version": 1
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(avg_margin_pct)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "5215a426",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b03ecdc5",
+                  "fields": [
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "name": "sum(avg_margin_pct)",
+                      "expression": "SUM(`avg_margin_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "annotations": [],
+              "widgetType": "combo",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                },
+                "y": {
+                  "primary": {
+                    "fields": [
+                      {
+                        "fieldName": "sum(avg_margin_pct)"
+                      }
+                    ]
+                  },
+                  "secondary": {
+                    "fields": []
+                  },
+                  "scale": {
+                    "type": "quantitative",
+                    "reverse": false
+                  },
+                  "axis": {
+                    "hideGrid": false,
+                    "hideLabels": false
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "product-category",
+            "queries": [
+              {
+                "name": "dashboards/01f198d014511ebcae380c0b1a0269d3/datasets/01f198d4855316b395879384bca685e9_product_category",
+                "query": {
+                  "datasetName": "b03ecdc5",
+                  "fields": [
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "name": "product_category_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Product Category",
+                "version": 1
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "product_category",
+                    "queryName": "dashboards/01f198d014511ebcae380c0b1a0269d3/datasets/01f198d4855316b395879384bca685e9_product_category"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 3,
+            "width": 4,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
